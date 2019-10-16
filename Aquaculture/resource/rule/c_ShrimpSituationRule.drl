@@ -1,0 +1,280 @@
+package cn.itcast.ssh.domain
+import cn.itcast.ssh.domain.ShrimpSituation;
+import cn.itcast.ssh.domain.ValueR;
+//日常虾情分析
+
+//<15天的幼苗期
+rule "Seeding Stage"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="幼苗期")
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed());
+       	System.out.println("此时虾苗处于幼苗期，请好好观察虾苗情况！");
+end
+
+//前期15-30天 体重
+rule "Early Stage averageWeigth1"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="放养前期"&& (new ValueR().getAveWeigthA()<averageWeigth && averageWeigth<=new ValueR().getAveWeigthB()))
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  体重(平均)："+shrimpsituation.getAverageWeigth()+"g/只");
+       	System.out.println("放养前期：虾苗体重在正常值("+new ValueR().getAveWeigthA()+","+new ValueR().getAveWeigthB()+"]g/只范围内，长势良好！");
+end
+rule "Early Stage averageWeigth2"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="放养前期" && averageWeigth<= new ValueR().getAveWeigthA())   //5.0
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  体重(平均)："+shrimpsituation.getAverageWeigth()+"g/只");
+        System.out.println("放养前期：虾苗体重偏轻，长势缓慢！此时段虾苗体重应在("+new ValueR().getAveWeigthA()+","+new ValueR().getAveWeigthB()+"]g/只之间！");
+end
+rule "Early Stage averageWeigth3"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="放养前期" && averageWeigth>new ValueR().getAveWeigthB())   //10.0
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  体重(平均)："+shrimpsituation.getAverageWeigth()+"g/只");
+       	System.out.println("放养前期：虾苗体重偏重，长势过快！此时段虾苗体重应在("+new ValueR().getAveWeigthA()+","+new ValueR().getAveWeigthB()+"]g/只之间！");
+end
+
+//中期30-60 体重
+rule "Medium Term averageWeigth1"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="放养中期"&& (new ValueR().getAveWeigthB()<averageWeigth && averageWeigth<=new ValueR().getAveWeigthC()))
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  体重(平均)："+shrimpsituation.getAverageWeigth()+"g/只");
+       	System.out.println("放养中期：虾苗体重在正常值("+new ValueR().getAveWeigthB()+","+new ValueR().getAveWeigthC()+"]g/只范围内，长势良好！");
+end
+rule "Medium Term averageWeigth2"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="放养中期"&& averageWeigth<=new ValueR().getAveWeigthB())  //10.0
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  体重(平均)："+shrimpsituation.getAverageWeigth()+"g/只");
+       	System.out.println("放养中期：虾苗体重偏轻，长势缓慢！此时段虾苗体重应在("+new ValueR().getAveWeigthB()+","+new ValueR().getAveWeigthC()+"]g/只之间！");
+end
+rule "Medium Term averageWeigth3"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="放养中期"&& averageWeigth>new ValueR().getAveWeigthC())  //15.0
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  体重(平均)："+shrimpsituation.getAverageWeigth()+"g/只");
+       	System.out.println("放养中期：虾苗体重偏重，长势过快！此时段虾苗体重应在("+new ValueR().getAveWeigthB()+","+new ValueR().getAveWeigthC()+"]g/只之间！");
+end
+
+//后期60-90 体重
+rule "Later Stage averageWeigth1"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="放养后期"&& (new ValueR().getAveWeigthC()<averageWeigth && averageWeigth<=new ValueR().getAveWeigthD()))
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  体重(平均)："+shrimpsituation.getAverageWeigth()+"g/只");
+       	System.out.println("放养后期：虾苗体重在正常值("+new ValueR().getAveWeigthC()+","+new ValueR().getAveWeigthD()+"]g/只范围内，长势良好！");
+end
+rule "Later Stage averageWeigth2"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="放养后期"&& averageWeigth<=new ValueR().getAveWeigthC()) //15.0
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  体重(平均)："+shrimpsituation.getAverageWeigth()+"g/只");
+       	System.out.println("放养后期：虾苗体重偏轻，长势缓慢！此时段虾苗体重应在("+new ValueR().getAveWeigthC()+","+new ValueR().getAveWeigthD()+"]g/只之间！");
+end
+rule "Later Stage averageWeigth3"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="放养后期"&& averageWeigth>new ValueR().getAveWeigthD())  //25.0
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  体重(平均)："+shrimpsituation.getAverageWeigth()+"g/只");
+       	System.out.println("放养后期：虾苗体重偏重，长势过快！此时段虾苗体重应在("+new ValueR().getAveWeigthC()+","+new ValueR().getAveWeigthD()+"]g/只之间！");
+end
+
+//后后期>90天 体重
+rule "Fish Stage averageWeigth1"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="捕捞期内"&& (new ValueR().getAveWeigthC()<averageWeigth && averageWeigth<=new ValueR().getAveWeigthD()))
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  体重(平均)："+shrimpsituation.getAverageWeigth()+"g/只");
+       	System.out.println("捕捞期内：此时段与放养后期相同，虾苗体重在正常值("+new ValueR().getAveWeigthC()+","+new ValueR().getAveWeigthD()+"]g/只范围内，长势良好！");
+end
+rule "Fish Stage averageWeigth2"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="捕捞期内"&& averageWeigth<=new ValueR().getAveWeigthC()) //15.0
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  体重(平均)："+shrimpsituation.getAverageWeigth()+"g/只");
+       	System.out.println("捕捞期内：此时段与放养后期相同，虾苗体重偏轻，长势缓慢！此时段虾苗体重应在("+new ValueR().getAveWeigthC()+","+new ValueR().getAveWeigthD()+"]g/只之间！");
+end
+rule "Fish Stage averageWeigth3"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="捕捞期内"&& averageWeigth>new ValueR().getAveWeigthD())  //25.0
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  体重(平均)："+shrimpsituation.getAverageWeigth()+"g/只");
+       	System.out.println("捕捞期内：虾苗体重已达标，可以捕获！");
+end
+
+//前期15-30天 长度
+rule "Early Stage averageLength1"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="放养前期"&& (new ValueR().getAveLengthA()<averageLength && averageLength<=new ValueR().getAveLengthB()))
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  长度(平均)："+shrimpsituation.getAverageLength()+"cm/只");
+       	System.out.println("放养前期：虾苗身长在正常值("+new ValueR().getAveLengthA()+","+new ValueR().getAveLengthB()+"]cm/只范围内，长势良好！");
+end
+rule "Early Stage averageLength2"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="放养前期"&& averageLength<=new ValueR().getAveLengthA())  //2.0
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  长度(平均)："+shrimpsituation.getAverageLength()+"cm/只");
+        System.out.println("放养前期：虾苗身长偏短，长势缓慢！此时段虾苗身长应在("+new ValueR().getAveLengthA()+","+new ValueR().getAveLengthB()+"]cm/只之间！");
+end
+rule "Early Stage averageLength3"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="放养前期"&& averageLength>new ValueR().getAveLengthB())  //3.0
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  长度(平均)："+shrimpsituation.getAverageLength()+"cm/只");
+       	System.out.println("放养前期：虾苗身长偏长，长势过快！此时段虾苗身长应在("+new ValueR().getAveLengthA()+","+new ValueR().getAveLengthB()+"]cm/只之间！");
+end
+
+//中期30-60 长度
+rule "Medium Term averageLength1"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="放养中期"&& (new ValueR().getAveLengthB()<averageLength && averageLength<=new ValueR().getAveLengthC()))
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  长度(平均)："+shrimpsituation.getAverageLength()+"cm/只");
+       	System.out.println("放养中期：虾苗身长在正常值("+new ValueR().getAveLengthB()+","+new ValueR().getAveLengthC()+"]cm/只范围内，长势良好！");
+end
+rule "Medium Term averageLength2"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="放养中期"&& averageLength<=new ValueR().getAveLengthB()) //3.0
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  长度(平均)："+shrimpsituation.getAverageLength()+"cm/只");
+       	System.out.println("放养中期：虾苗身长偏短，长势缓慢！此时段虾苗身长应在("+new ValueR().getAveLengthB()+","+new ValueR().getAveLengthC()+"]cm/只之间！");
+end
+rule "Medium Term averageLength3"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="放养中期"&& averageLength>new ValueR().getAveLengthC()) //10.0
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  长度(平均)："+shrimpsituation.getAverageLength()+"cm/只");
+       	System.out.println("放养中期：虾苗身长偏长，长势过快！此时段虾苗身长应在("+new ValueR().getAveLengthB()+","+new ValueR().getAveLengthC()+"]cm/只之间！");
+end
+
+//后期60-90 长度
+rule "Later Stage averageLength1"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="放养后期"&& (new ValueR().getAveLengthC()<averageLength && averageLength<=new ValueR().getAveLengthD()))
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  长度(平均)："+shrimpsituation.getAverageLength()+"cm/只");
+       	System.out.println("放养后期：虾苗身长在正常值("+new ValueR().getAveLengthC()+","+new ValueR().getAveLengthD()+"]cm/只范围内，长势良好！");
+end
+rule "Later Stage averageLength2"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="放养后期"&& averageLength<=new ValueR().getAveLengthC()) //10.0
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  长度(平均)："+shrimpsituation.getAverageLength()+"cm/只");
+       	System.out.println("放养中期：虾苗身长偏短，长势缓慢！此时段虾苗身长应在("+new ValueR().getAveLengthC()+","+new ValueR().getAveLengthD()+"]cm/只之间！");
+end
+rule "Later Stage averageLength3"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="放养后期"&& averageLength>new ValueR().getAveLengthD())  //23.0
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  长度(平均)："+shrimpsituation.getAverageLength()+"cm/只");
+       	System.out.println("放养中期：虾苗身长偏长，长势过快！此时段虾苗身长应在("+new ValueR().getAveLengthC()+","+new ValueR().getAveLengthD()+"]cm/只之间！");
+end
+
+//后后期>90天 长度
+rule "Fish Stage averageLength1"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="捕捞期内"&& (new ValueR().getAveLengthC()<averageLength && averageLength<=new ValueR().getAveLengthD()))
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  长度(平均)："+shrimpsituation.getAverageLength()+"cm/只");
+       	System.out.println("捕捞期内：此时段与放养后期相同，虾苗身长在正常值("+new ValueR().getAveLengthC()+","+new ValueR().getAveLengthD()+"]cm/只范围内，长势良好！");
+end
+rule "Fish Stage averageLength2"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="捕捞期内"&& averageLength<=new ValueR().getAveLengthC()) //10.0
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  长度(平均)："+shrimpsituation.getAverageLength()+"cm/只");
+       	System.out.println("捕捞期内：此时段与放养后期相同，虾苗身长偏短，长势缓慢！此时段虾苗身长应在("+new ValueR().getAveLengthC()+","+new ValueR().getAveLengthD()+"]cm/只之间！");
+end
+rule "Fish Stage averageLength3"
+    when
+       	shrimpsituation:ShrimpSituation(currPeriodBreed=="捕捞期内"&& averageLength>new ValueR().getAveLengthD())  //23.0
+    then
+    	System.out.println(shrimpsituation.getCurrPeriodBreed()+":  长度(平均)："+shrimpsituation.getAverageLength()+"cm/只");
+       	System.out.println("捕捞期内：虾苗身长已达标，可以捕获！");
+end
+
+//死亡率
+rule "Death Rate1"
+    when
+       	shrimpsituation:ShrimpSituation(0<=averageMortality && averageMortality<new ValueR().getAveMortality()) //0.03  3%
+    then
+    	System.out.println("死亡率："+shrimpsituation.getAverageMortality()*100+"%");
+    	System.out.println("死亡率在正常范围(<"+new ValueR().getAveMortality()*100+"%)内");
+end
+rule "Death Rate2"
+    when
+       	shrimpsituation:ShrimpSituation(new ValueR().getAveMortality()<=averageMortality)
+    then
+    	System.out.println("死亡率："+shrimpsituation.getAverageMortality()*100+"%");
+       	System.out.println("警告：死亡率超出正常范围了，请注意观察虾的长势情况，尽早做好疾病预防的治疗！正常死亡率范围为<"+new ValueR().getAveMortality()*100+"%。");
+end
+
+//体色监测
+rule "Monitor BodyColor1"
+    when
+        shrimpsituation:ShrimpSituation(colorBody=="淡红色，甲壳内侧有白点，肝胰腺淡黄色"||colorBody=="明显变红，红须，红尾"||colorBody=="黑色素沉淀，甲壳变黑"
+        ||colorBody=="黑鳃，红腿，红须，红尾"||colorBody=="黑鳃，黑色纤毛状物"||colorBody=="腹部肌肉变白，不透明"||colorBody=="黑鳃，黑体")
+    then
+    	System.out.println("当前虾体色："+ shrimpsituation.getColorBody());
+        System.out.println("警告：虾体色出现异常，注意虾是否得病！");
+end
+rule "Monitor BodyColor2"
+    when
+       	shrimpsituation:ShrimpSituation(colorBody=="体色完好")
+    then
+    	System.out.println("当前虾体色："+ shrimpsituation.getColorBody());
+       	System.out.println("虾体色完好，长势良好");
+end
+
+//行为监测
+rule "Monitor BehaviorBody1"
+    when
+       	shrimpsituation:ShrimpSituation(behaviorBody=="行动迟缓，漫游打转"||behaviorBody=="活动能力下降，消瘦"
+       	||behaviorBody=="行动迟缓"||behaviorBody=="活动能力下降，浮于水面")
+    then
+    	System.out.println("当前虾行为："+ shrimpsituation.getBehaviorBody());
+       	System.out.println("警告：虾行为出现异常，注意虾是否得病！");
+end
+rule "Monitor BehaviorBody2"
+    when
+       	shrimpsituation:ShrimpSituation(behaviorBody=="行为正常")
+    then
+    	System.out.println("当前虾行为："+ shrimpsituation.getBehaviorBody());
+       	System.out.println("虾行为正常，长势良好");
+end
+
+//体表监测
+rule "Monitor SurfaceBody1"
+    when
+       	shrimpsituation:ShrimpSituation(surfaceBody=="头胸甲易剥离"||surfaceBody=="蜕皮，胃肠不饱满"||surfaceBody=="甲壳坏死，脱落；鳃、头胸甲、肢、眼球含寄生菌"
+       	||surfaceBody=="烂鳃，烂尾，断须，皱缩脱落"||surfaceBody=="鳃、头胸甲、肢、体表含寄生虫"||surfaceBody=="体表附丝状藻类"||surfaceBody=="甲壳薄而软，壳与肌肉分离，无力蜕壳")
+    then
+    	System.out.println("当前虾体表："+ shrimpsituation.getSurfaceBody());
+       	System.out.println("警告：虾体表出现异常，注意虾是否得病！");
+end
+rule "Monitor SurfaceBody2"
+    when
+       	shrimpsituation:ShrimpSituation(surfaceBody=="体表完好")
+    then
+    	System.out.println("当前虾体表："+ shrimpsituation.getSurfaceBody());
+       	System.out.println("虾体表正常，长势良好");
+end
+
+//摄食情况
+rule "Feed Situation1"
+    when
+       	shrimpsituation:ShrimpSituation(situationFeed=="减少或停止"||situationFeed=="停止"||situationFeed=="减少")
+    then
+    	System.out.println("当前虾摄食情况："+ shrimpsituation.getSituationFeed());
+       	System.out.println("警告：虾摄食情况差，注意虾是否得病！");
+end
+rule "Feed Situation12"
+    when
+       	shrimpsituation:ShrimpSituation(situationFeed=="摄食正常")
+    then
+    	System.out.println("当前虾摄食情况："+ shrimpsituation.getSituationFeed());
+       	System.out.println("虾摄食正常，长势良好");
+end

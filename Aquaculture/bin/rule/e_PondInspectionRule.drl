@@ -1,0 +1,73 @@
+package cn.itcast.ssh.domain
+import cn.itcast.ssh.domain.PondInspection;
+//巡塘管理（几种异常情况）
+
+//漫堤情况
+rule "Overtopping dam"
+    when
+       pondInspection:PondInspection(situationPond=="漫堤")
+    then
+       pondInspection.setMeasure("漫堤、漫网现象可能造成塘埂破损，出现鱼虾逃逸情况，采取措施：加高加固围网，并经常检查堤坝是否安全，有无塌方、渗漏折裂等现象。");  
+       System.out.println(pondInspection.getSituationPond() + ":" + pondInspection.getMeasure());
+end
+
+//暴雨后
+rule "Rainstorm "
+    when
+       pondInspection:PondInspection(situationPond=="暴雨")
+    then
+       pondInspection.setMeasure("暴雨后要排出池塘表层水，开动增氧机，避免水体分层而缺氧。及时用10ppm生石灰调节池水的pH，泼洒0.3ppm枯草芽孢杆菌，以便稳定水质。"); 
+       System.out.println(pondInspection.getSituationPond() + ":" + pondInspection.getMeasure()); 
+end
+
+//水色观察
+rule "Anomaly of Water color "
+    when
+       pondInspection:PondInspection(situationPond=="水色异常")
+    then
+       pondInspection.setMeasure("水色反映了虾池中浮游生物的种类和数量，正常水色为黄绿色和茶褐色，水质具有新鲜感，无异常气味，以硅藻为主要种类。"+
+          "水色异常表现为如下几种情况：1.深绿色:则是鞭毛藻类过度繁殖的结果。2.红色：是由一些原生动物(纤毛虫、夜光虫等)繁殖过度所引起，也可能是轮虫或其他浮游动物大量繁殖的结果。"+
+          "3.乳白色:是由细菌繁殖所造成藻类突然死亡而引起，其分解产物是有毒的。4.水清见底而非突然变清:往往是浒苔和沟草大量繁殖的缘故;如果是突然变清,则表明浮游植物大量死亡而消失。"+
+          "5.灰蓝色且有鱼腥味:可能是蓝藻中的鱼腥藻或拟鱼腥藻大量出现造成的。");  
+       System.out.println(pondInspection.getSituationPond() + ":" + pondInspection.getMeasure());
+end
+
+//地质观察
+rule "Anomaly of Sediment"
+    when
+       pondInspection:PondInspection(situationPond=="底质异常")
+    then
+       pondInspection.setMeasure("正常的池底无异常气味，如果池底变黑和散发臭味则表明底质变坏，造成原因有：清池不彻底、投喂量过大或投喂了已变质的饲料、水体中有大量丝状藻或水草等老化枯死后沉底、池水过肥、换水量不够等。"+
+       "采取措施：放养期间要合理投喂，减少残饵；控制丝状藻类和水草的繁殖启动增氧机以改善水环境条件，必要时可施用炼铁炉渣(硅酸铁)，按1.5kg/平方米撒入黑化区，可消除硫化氢，起到一定的解毒作用。");  
+	   System.out.println(pondInspection.getSituationPond() + ":" + pondInspection.getMeasure());
+end
+
+//高温时
+rule "Superhigh temperature"
+    when
+       pondInspection:PondInspection(situationPond=="高温")
+    then
+       pondInspection.setMeasure("水温在35℃以上的高温期正是台风和暴雨季节，水质易恶化，虾易出现浮头现象，也易诱发虾病。"+
+      		 "采取措施：1.应增加到最高水位，并添加淡井水逐渐降低池水盐度来适应暴雨的变化。2.配备增氧机，严防浮头事故发生。"+
+      		 "3.饲料要新鲜优质，并酌情减少投喂量，有时甚至要暂停投喂，同时要及时清除残饵，减少污染。4.适当换水，改善水质，及时排除池底污物，保持水质新鲜。"); 
+       System.out.println(pondInspection.getSituationPond() + ":" + pondInspection.getMeasure()); 
+end
+
+//病害预防
+rule "Disease prevention"
+    when
+       pondInspection:PondInspection(situationPond=="病害预防")
+    then
+       pondInspection.setMeasure("防病：坚持预防为主、治疗为辅的原则，做到无病早防、有病早治、防治结合、标本兼治。定期泼洒底质改良剂和水质改良剂，"+
+              "保持水体各项养殖指标在安全合理的范围，必要时可泼洒消毒剂进行消毒，消毒剂如聚维酮碘或二氧化氯。泼洒消毒剂后，调节水质的微生物要间隔3天才能使用。");  
+       System.out.println(pondInspection.getSituationPond() + ":" + pondInspection.getMeasure());
+end
+
+//其他非可预见的意外
+rule "Other Situations"
+    when
+       pondInspection:PondInspection(situationPond=="其他非可预见的的意外情况")
+    then
+       pondInspection.setMeasure("对于一些非可预见的的其他异常情况，请仔细查询南美白对虾专业养殖手册，寻求可解决的可靠方法！");  
+       System.out.println(pondInspection.getSituationPond() + ":" + pondInspection.getMeasure());
+end

@@ -1,0 +1,101 @@
+package cn.itcast.ssh.domain
+import cn.itcast.ssh.domain.Medicine;
+//科学投药
+//1.白斑病
+rule "Leucoderma" 
+    when
+       	medicine:Medicine(getDisease() =="白斑病");
+    then
+        medicine.setTreatment("1、严格清塘，虾苗检疫，使用生物制剂，合理投饵、强体抗病。2、15—20g/m3生石灰或0.2-0.4g/m3溴氯海因全池泼洒，半月1次。"+
+        						"3、饲料中添加1%-2@对虾病毒克星和0.5%白虾服尔康。4、0.1%克毒王+1%高稳Vc+1%肝泰。");
+        System.out.println(medicine.getDisease()+",治疗方法：" + medicine.getTreatment());
+end
+
+//2.红体病getDisease()
+rule "Reddish Body" 
+    when
+      medicine:Medicine(getDisease() =="红体病");
+    then
+      medicine.setTreatment("1、0.3g/m3超强消毒王或0.3g/m3溴海因或0.3g/m3杀菌红全池泼洒。2、内服1%高效灭菌碘+1%虾类诱食剂。"+
+        						"3、0.1%克毒王+1%汉宝多维+1%高稳Vc。");
+      System.out.println(medicine.getDisease()+",治疗方法：" + medicine.getTreatment());
+end
+
+//3.黑鳃病
+rule "Black Gill"  
+	when
+      medicine:Medicine(getDisease() =="黑鳃病");
+    then
+      medicine.setTreatment("1、0.3g/m3溴海因或二氯海因全池泼洒，半月1次。2、泼洒0.2g/m3杀菌红或高效灭菌碘。"+
+        						"3、内服1%克菌王或虾康尔+1%高稳Vc。4、饲料中长期添加保肝剂(肝泰等)。");
+      System.out.println(medicine.getDisease()+",治疗方法：" + medicine.getTreatment());
+end
+
+//4.烂鳃病
+rule "Rotten Gill"  
+	when
+       medicine:Medicine(getDisease() =="烂鳃病");
+    then
+        medicine.setTreatment("1、0.3g/m3溴海因或二氯海因全池泼洒。2、内服1%高效灭菌碘或0.3g/m3杀菌王+1%虾类诱食剂。"+
+        						"3、饲料中添加1%-2%对虾病毒克星和0.5%服尔康。");
+		System.out.println(medicine.getDisease()+",治疗方法：" + medicine.getTreatment());
+end
+
+//5.固着类纤毛虫病
+rule "Sessilinasis" 
+	when
+       	medicine:Medicine(getDisease() =="固着类纤毛虫病");
+    then
+       	medicine.setTreatment("1、脱壳高峰期在饵料中添加0.1%脱壳促长剂。2、0.8g/m3虾蟹纤虫杀全池泼洒。"+
+        						"3、0.3g/m3甲壳净+0.2g/m3硫酸铜或0.7g/m3纤虫双杀或0.2g/m3藻虫清全池泼洒。");
+		System.out.println(medicine.getDisease()+",治疗方法：" + medicine.getTreatment());
+end
+
+//6.白色综合病
+rule "White Syndrome"    
+    when
+       	medicine:Medicine(getDisease() =="白色综合病");
+    then
+    	medicine.setTreatment("1、调节放养密度，使之适宜，并保持水中溶解氧在4mg/L以上。2、0.3g/m3溴海因或二氯海因全池泼洒。"+
+    							"3、内服0.3g/m3土霉素(伴饵投喂)。");
+		System.out.println(medicine.getDisease()+",治疗方法：" + medicine.getTreatment());
+end
+
+//7.藻类中毒
+rule "Algal Poisoning"    
+    when
+       	medicine:Medicine(getDisease() =="藻类中毒")
+    then
+    	medicine.setTreatment("1、放养期间经常加换水，控制投饵量以免残饵积累过多。2、用0.7g/m3络合铜或0.3g/m3青苔净全池泼洒。"+
+        						"3、控制池水氨氮总量。");
+        System.out.println(medicine.getDisease()+",治疗方法：" + medicine.getTreatment());
+end
+
+//8.亚硝酸盐中毒
+rule "Nitrite Poisoning"    
+    when
+       	medicine:Medicine(getDisease() =="亚硝酸盐中毒");
+    then
+    	medicine.setTreatment("1、大量冲水，以降低亚硝酸盐浓度。2、加入适量生石灰(5kg／亩～10 kg／亩)，适当提高pH值。"+
+    							"3、使用光合细菌，水质、底质净化改良剂调节，吸收有毒氨氮。4、增加水体溶解氧。");
+    	System.out.println(medicine.getDisease()+",治疗方法：" + medicine.getTreatment());
+end
+
+//9.营养性疾病
+rule "Nutritional"    
+    when
+  		medicine:Medicine(getDisease() =="营养性疾病");
+  	then
+    	medicine.setTreatment("1、投喂营养全面的南美白对虾专用颗粒饲料。2、0.3g/m3溴海因或二氯海因全池泼洒。"+
+        						"3、添加虾类多维、贝壳粉和脱壳促生素。");
+    	System.out.println(medicine.getDisease()+",治疗方法：" + medicine.getTreatment());
+end
+
+//10.无病
+rule "Nodisease"    
+    when
+  		medicine:Medicine(getDisease() =="未监测出病症");
+  	then
+    	medicine.setTreatment("不用投药，请继续观察，积极做好预防工作！");
+    	System.out.println(medicine.getDisease()+",治疗方法：" + medicine.getTreatment());
+end

@@ -1,0 +1,28 @@
+package cn.itcast.ssh.domain
+import cn.itcast.ssh.domain.WaterLevel;
+import cn.itcast.ssh.domain.ValueR;
+
+//实时水位监测
+rule "High water level"
+    when
+        waterlevel:WaterLevel(height > new ValueR().getHeightmax())   //1.8
+    then
+        System.out.println("水位是："+waterlevel.getHeight()+"m");
+        System.out.println("警告：此时水位偏高，请适当出水。正常水位是["+ new ValueR().getHeightmin()+","+new ValueR().getHeightmax()+"]m之间！");
+end
+
+rule "Low water level"
+    when
+        waterlevel:WaterLevel(height < new ValueR().getHeightmin())  //1.5
+    then
+        System.out.println("水位是："+waterlevel.getHeight()+"m");
+        System.out.println("警告：此时水位偏低，请适当进水。正常水位是["+ new ValueR().getHeightmin()+","+new ValueR().getHeightmax()+"]m之间！");
+end
+
+rule "Normal water level"
+    when
+        waterlevel:WaterLevel(new ValueR().getHeightmin()<=height && height<=new ValueR().getHeightmax())
+    then
+        System.out.println("水位是："+waterlevel.getHeight()+"m");
+        System.out.println("此时水位正常！");
+end

@@ -1,0 +1,137 @@
+package cn.itcast.ssh.domain
+import cn.itcast.ssh.domain.WaterQuality;
+import cn.itcast.ssh.domain.ValueR;
+
+//实时水质监测
+//1.水温
+rule "High water temperature"
+    when
+      	$waterquality:WaterQuality(temperature > new ValueR().getTempermax())  //35.0
+    then
+    	System.out.println("水温是："+ $waterquality.getTemperature()+"℃");
+      	System.out.println("警告：此时水温偏高，请适当降低水温。正常水温在["+ new ValueR().getTempermin()+","+ new ValueR().getTempermax()+"]摄氏度之间！");
+end
+rule "Low water temperature"
+    when
+       	$waterquality:WaterQuality(temperature < new ValueR().getTempermin())  //22.0
+    then
+     	System.out.println("水温是："+ $waterquality.getTemperature()+"℃");
+       	System.out.println("警告：此时水温偏低，请适当升高水温。正常水温在["+ new ValueR().getTempermin()+","+ new ValueR().getTempermax()+"]摄氏度之间！");
+end
+rule "Normal water temperature"
+    when
+       	$waterquality:WaterQuality(new ValueR().getTempermin()<=temperature && temperature<= new ValueR().getTempermax())
+    then
+    	System.out.println("水温是："+ $waterquality.getTemperature()+"℃");
+       	System.out.println("此时水温正常!");
+end
+
+//2.ph值 
+rule "High valuePH"
+    when
+       	$waterquality:WaterQuality(valuePH > new ValueR().getValuePHmax())     //8.8
+    then
+    	System.out.println("PH是："+ $waterquality.getValuePH());
+       	System.out.println("警告：此时水中PH值偏高，可适当投入适量滑石灰进行调节。正常PH在["+new ValueR().getValuePHmin()+"-"+ new ValueR().getValuePHmax()+"]之间！");
+end
+rule "Low valuePH"
+    when
+       	$waterquality:WaterQuality(valuePH < new ValueR().getValuePHmin())    //8.0
+    then
+    	System.out.println("PH是："+ $waterquality.getValuePH());
+    	System.out.println("警告：此时水中PH值偏低，可适当投入适量生石灰进行调节。正常PH在["+new ValueR().getValuePHmin()+"-"+ new ValueR().getValuePHmax()+"]之间！");
+end
+rule "Normal valuePH"
+    when
+       	$waterquality:WaterQuality(new ValueR().getValuePHmin()<=valuePH && valuePH<= new ValueR().getValuePHmax())
+    then
+    	System.out.println("PH是："+ $waterquality.getValuePH());
+  		System.out.println("此时水中PH值正常!");
+end
+
+//3.溶解氧含量 
+rule "Low contentDO"
+    when
+       	$waterquality:WaterQuality(contentDO < new ValueR().getContentDOmin())   //4.0
+    then
+    	System.out.println("溶解氧含量是："+ $waterquality.getContentDO()+"mg/l");
+       	System.out.println("警告：此时水中溶解氧含量过低，请增大氧含量，并注意虾是否患白色综合症！正常溶解氧含量>="+new ValueR().getContentDOmin()+"mg/l！");
+end
+rule "Normal contentDO"
+    when
+       	$waterquality:WaterQuality(contentDO >= new ValueR().getContentDOmin())
+    then
+    	System.out.println("溶解氧含量是："+ $waterquality.getContentDO()+"mg/l");
+       	System.out.println("此时水中溶解氧含量正常!");
+end
+
+//4.氨氮含量
+rule "High contentAN"
+	when
+ 	   	$waterquality:WaterQuality(contentAN > new ValueR().getContentANmax())   //0.02
+    then
+    	System.out.println("氨氮含量是："+ $waterquality.getContentAN()+"mg/l");
+       	System.out.println("警告：此时水中氨氮含量过低，请降低氨氮含量！正常氨氮含量<="+new ValueR().getContentANmax()+"mg/l!");
+end
+rule "Normal contentAN"
+    when
+       	$waterquality:WaterQuality(contentAN <= new ValueR().getContentANmax())
+    then
+    	System.out.println("氨氮含量是："+ $waterquality.getContentAN()+"mg/l");
+       	System.out.println("水中氨氮含量正常!");
+end
+
+//5.亚硝酸盐含量
+rule "High contentN"
+    when
+       	$waterquality:WaterQuality(contentN > new ValueR().getContentNmax())    //0.1
+    then
+    	System.out.println("亚硝酸盐含量是："+ $waterquality.getContentN()+"mg/l");
+       	System.out.println("警告：此时水中亚硝酸盐含量过高，请降低亚硝酸盐含量，并注意虾是否亚硝酸盐中毒！正常亚硝酸盐含量<="+new ValueR().getContentNmax()+"mg/l!");
+end
+rule "Normal contentN"
+    when
+       	$waterquality:WaterQuality(contentN <= new ValueR().getContentNmax())
+    then
+    	System.out.println("亚硝酸盐含量是："+ $waterquality.getContentN()+"mg/l");
+       	System.out.println("水中亚硝酸盐含量正常!");
+end
+
+//6.硫化氢含量
+rule "High contentS"
+	when
+       	$waterquality:WaterQuality(contentS > new ValueR().getContentSmax())  //0.1
+    then
+    	System.out.println("硫化氢含量是："+ $waterquality.getContentS()+"mg/l");
+       	System.out.println("警告：此时水中硫化氢含量过高，请降低硫化氢含量，并注意虾是否藻类中毒！正常硫化氢含量<="+new ValueR().getContentSmax()+"mg/l!");
+end
+rule "Normal contentS"
+    when
+       	$waterquality:WaterQuality(contentS <= new ValueR().getContentSmax())
+    then
+    	System.out.println("硫化氢含量是："+ $waterquality.getContentS()+"mg/l");
+       	System.out.println("水中硫化氢含量正常!");
+end
+
+//7.浊度 
+rule "High turbidity"
+    when
+       	$waterquality:WaterQuality(turbidity > new ValueR().getTurbiditymax())   //40.0
+    then
+    	System.out.println("浊度是："+ $waterquality.getTurbidity()+"cm");
+       	System.out.println("警告：水中透明度太高，不利于虾养殖！正常即透明度在["+new ValueR().getTurbiditymin()+","+new ValueR().getTurbiditymax()+"]cm之间！");
+end
+rule "Low turbidity"
+    when
+       	$waterquality:WaterQuality(turbidity < new ValueR().getTurbiditymin())  //25.0
+    then
+    	System.out.println("浊度是："+ $waterquality.getTurbidity()+"cm");
+       	System.out.println("警告：水即透明度太低，请换水5%-10%！正常透明度在["+new ValueR().getTurbiditymin()+","+new ValueR().getTurbiditymax()+"]cm之间！");
+end
+rule "Normal turbidity"
+    when
+       	$waterquality:WaterQuality(new ValueR().getTurbiditymin()<=turbidity && turbidity<= new ValueR().getTurbiditymax())
+    then
+    	System.out.println("浊度是："+ $waterquality.getTurbidity()+"cm");
+  		System.out.println("此时水中透明度保持正常!");
+end

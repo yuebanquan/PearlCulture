@@ -1,0 +1,87 @@
+package cn.itcast.ssh.domain
+import cn.itcast.ssh.domain.Feeding;
+//科学投喂
+
+//<15天的幼苗期
+rule "Seeding Stage"
+    when
+       feeding:Feeding(currPeriodBreed=="幼苗期")
+    then
+       System.out.println(feeding.getCurrPeriodBreed()+"：专家建议日投2次。请投放无病原体的鲜活饵料或幼虾专用配合饲料！");
+end
+
+//前期15-30
+rule "Early Stage"
+    when
+       feeding:Feeding(currPeriodBreed=="放养前期")
+    then
+       System.out.println(feeding.getCurrPeriodBreed()+"：专家建议日投放次数3次。建议投放时间：7:00、12:00、18:00。建议日投放量为虾平均体重的8%-10%。请完全投放南美白对虾专用饲料。");
+end
+
+//中期30-60
+rule "Medium Term"
+    when
+      	feeding:Feeding(currPeriodBreed=="放养中期")
+    then
+       	System.out.println(feeding.getCurrPeriodBreed()+"：专家建议日投放次数4次。建议投放时间：7:00、11:00、16:00、20:00。建议日投放量为虾平均体重的4%-8%。请完全投放南美白对虾专用饲料。");
+end
+
+//后期60-90
+rule "Later Stage"
+    when
+       feeding:Feeding(currPeriodBreed=="放养后期")
+    then
+       System.out.println(feeding.getCurrPeriodBreed()+"：专家建议日投放次数6次。建议投放时间：6:00、9:00、12:00、15:00、18:00、21:00。建议日投放量为虾平均体重的2%-4%。请完全投放南美白对虾专用饲料。");
+end
+
+//后后期>90
+rule "Fish Stage"
+    when
+       feeding:Feeding(currPeriodBreed=="捕捞期内")
+    then
+       System.out.println(feeding.getCurrPeriodBreed()+"：重新放养的虾，仍按照放养后期的投喂规则投喂，专家建议日投放次数6次。建议投放时间：6:00、9:00、12:00、15:00、18:00、21:00。建议日投放量为虾平均体重的2%-4%。请完全投放南美白对虾专用饲料。");
+end
+
+//天气  晴/阴
+rule "Good Weather"
+    when
+       feeding:Feeding(weather=="晴朗"||weather=="适温")
+    then
+       System.out.println("天气:"+ feeding.getWeather() +"，适合生长，可适当增大投喂量或投喂次数！");
+end
+rule "Bad Weather"
+    when
+       feeding:Feeding(weather=="阴雨"||weather=="台风"||weather=="寒冷"||weather=="高温")
+    then
+       System.out.println("天气:"+ feeding.getWeather() +"，不适合生长，应适当减少投喂量或投喂次数！");
+end
+
+//水质  好/不好
+rule "Good Waterquality"
+    when
+       feeding:Feeding(waterquality=="良好")
+    then
+       System.out.println("水质:"+ feeding.getWaterquality() +"，适合生长，可适当增大投喂量或投喂次数！");
+end
+rule "Bad Waterquality"
+    when
+       feeding:Feeding(waterquality=="差")
+    then
+       System.out.println("水质:"+ feeding.getWaterquality() +"，不适合生长，应适当减少投喂量或投喂次数！");
+end
+
+//生长情况  良好/不好
+rule "Good Growthsituation"
+    when
+       feeding:Feeding(situationGrowth=="好"||situationGrowth=="硬壳")
+    then
+       System.out.println("虾生长情况:"+ feeding.getSituationGrowth() +"，可适当增大投喂量或投喂次数！");
+end
+rule "Bad Growthsituation"
+    when
+       feeding:Feeding(situationGrowth=="差"||situationGrowth=="蜕皮"||situationGrowth=="剩食"||situationGrowth=="生病")
+    then
+       System.out.println("生长情况:"+ feeding.getSituationGrowth() +"，应适当减少投喂量或投喂次数！");
+end
+
+

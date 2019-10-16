@@ -1,0 +1,48 @@
+package cn.itcast.ssh.domain
+import cn.itcast.ssh.domain.DiseaseSources;
+
+//浮游(微)生物         (病源监测)
+
+rule "Baculovirus"
+    when
+       diseaseSource:DiseaseSources(plankton=="白班杆状病毒")
+    then
+       System.out.println("警告：监测出 "+ diseaseSource.getPlankton());
+end
+
+rule "Tauravirus"
+   when
+       diseaseSource:DiseaseSources(plankton=="桃拉病毒")
+    then
+       System.out.println("警告：监测出 "+ diseaseSource.getPlankton());
+end
+
+rule "Fusarium"
+   when
+       diseaseSource:DiseaseSources(plankton=="镰刀菌")
+    then
+       System.out.println("警告：监测出 "+ diseaseSource.getPlankton());
+end
+
+rule "Vibrion SPP"
+   when
+       diseaseSource:DiseaseSources(plankton=="弧菌"||plankton=="杆菌"||plankton=="丝状细菌")
+    then
+       System.out.println("警告：监测出 "+ diseaseSource.getPlankton());
+end
+
+rule "Zoothamnium"
+   when
+       diseaseSource:DiseaseSources(plankton=="聚缩虫"||plankton=="累枝虫"||plankton=="钟型虫"||plankton=="单缩虫")
+    then
+       System.out.println("警告：监测出 "+ diseaseSource.getPlankton());
+end
+
+rule "No Germs"
+   when
+       diseaseSource:DiseaseSources(plankton=="无")
+    then
+       System.out.println("监测结果：" + diseaseSource.getPlankton() + "。未检测出病菌！");
+end
+
+

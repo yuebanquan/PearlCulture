@@ -1,0 +1,103 @@
+package cn.itcast.ssh.domain
+import cn.itcast.ssh.domain.WaterQuality;//水质
+import cn.itcast.ssh.domain.DiseaseSources;//病源监测
+import cn.itcast.ssh.domain.ShrimpSituation;//虾情
+import cn.itcast.ssh.domain.Medicine;//疾病
+
+//1.白斑病
+rule "Leucoderma"    
+    when
+   	 	diseaseSource:DiseaseSources(getPlankton()=="白班杆状病毒")
+   	 	shrimpsituation:ShrimpSituation(getColorBody()=="淡红色，甲壳内侧有白点，肝胰腺淡黄色"&&getBehaviorBody()=="行动迟缓，漫游打转"&&getSurfaceBody()=="头胸甲易剥离"&&getSituationFeed()=="减少或停止")		
+    	medicine:Medicine()
+    then
+    	medicine.setDisease("白斑病");
+       	System.out.println("诊断结果：" + medicine.getDisease());
+end
+
+//2.红体病
+rule "Reddish Body"    
+    when
+    	diseaseSource:DiseaseSources(getPlankton()=="桃拉病毒")
+    	shrimpsituation:ShrimpSituation(getColorBody()=="明显变红，红须，红尾"&&getBehaviorBody()=="活动能力下降，消瘦"&&getSurfaceBody()=="蜕皮，胃肠不饱满"&&getSituationFeed()=="停止")		
+    	medicine:Medicine()
+    then
+    	medicine.setDisease("红体病");
+    	System.out.println("诊断结果：" + medicine.getDisease());
+end
+
+//3.黑鳃病
+rule "Black Gill"    
+    when
+    	diseaseSource:DiseaseSources(getPlankton()=="镰刀菌")
+    	shrimpsituation:ShrimpSituation(getColorBody()=="黑色素沉淀，甲壳变黑"&&getBehaviorBody()=="行动迟缓"&&getSurfaceBody()=="甲壳坏死，脱落；鳃、头胸甲、肢、眼球含寄生菌"&&getSituationFeed()=="减少或停止")		
+    	medicine:Medicine()
+    then
+    	medicine.setDisease("黑鳃病");
+    	System.out.println("诊断结果：" + medicine.getDisease());
+end
+
+//4.烂鳃病
+rule "Rotten Gill"    
+    when
+    	diseaseSource:DiseaseSources(getPlankton()=="弧菌"||getPlankton()=="杆菌"||getPlankton()=="丝状细菌")
+    	shrimpsituation:ShrimpSituation(getColorBody()=="黑鳃，红腿，红须，红尾"&&getBehaviorBody()=="活动能力下降，浮于水面"&&getSurfaceBody()=="烂鳃，烂尾，断须，皱缩脱落"&&getSituationFeed()=="减少或停止")		
+    	medicine:Medicine()
+   	then
+    	medicine.setDisease("烂鳃病");
+    	System.out.println("诊断结果：" + medicine.getDisease());
+end
+
+//5.固着类纤毛虫病
+rule "Sessilinasis"    
+    when
+    	diseaseSource:DiseaseSources(getPlankton()=="聚缩虫"||getPlankton()=="累枝虫"||getPlankton()=="钟型虫"||getPlankton()=="单缩虫")
+    	shrimpsituation:ShrimpSituation(getColorBody()=="黑鳃，黑色纤毛状物"&&getBehaviorBody()=="行动迟缓，漫游打转"&&getSurfaceBody()=="鳃、头胸甲、肢、体表含寄生虫"&&getSituationFeed()=="减少或停止")		
+    	medicine:Medicine()
+    then
+    	medicine.setDisease("固着类纤毛虫病");
+    	System.out.println("诊断结果：" + medicine.getDisease());
+end
+
+//6.白色综合病
+rule "White Syndrome"    
+    when
+    	waterquality:WaterQuality(getContentDO()<4.0 && (getTemperature()>35 ||getTemperature()<22))
+    	shrimpsituation:ShrimpSituation(getColorBody()=="腹部肌肉变白，不透明"&&getBehaviorBody()=="行动迟缓，漫游打转"&&getSituationFeed()=="停止")		
+    	medicine:Medicine()
+    then
+    	medicine.setDisease("白色综合症");
+    	System.out.println("诊断结果：" + medicine.getDisease());
+end
+
+//7.藻类中毒
+rule "Algal Poisoning"  
+    when
+    	waterquality:WaterQuality(getContentS()>0.1 && getTemperature()>35)
+    	shrimpsituation:ShrimpSituation(getBehaviorBody()=="行动迟缓，漫游打转"&&getSurfaceBody()=="体表附丝状藻类"&&getSituationFeed()=="减少或停止")		
+    	medicine:Medicine()
+    then
+    	medicine.setDisease("藻类中毒");
+    	System.out.println("诊断结果：" + medicine.getDisease());
+end
+
+//8.亚硝酸盐中毒
+rule "Nitrite Poisoning"  
+    when
+    	waterquality:WaterQuality(getContentN()>0.1 && getContentDO()<4.0)
+    	shrimpsituation:ShrimpSituation(getBehaviorBody()=="行动迟缓，漫游打转"&&getSituationFeed()=="减少或停止")		
+    	medicine:Medicine()
+    then
+    	medicine.setDisease("亚硝酸盐中毒");
+    	System.out.println("诊断结果：" + medicine.getDisease());
+end
+
+//9.营养性疾病
+rule "Nutritional"    
+    when
+    	shrimpsituation:ShrimpSituation(getColorBody()=="黑鳃，黑体"&&getBehaviorBody()=="行动迟缓，漫游打转"&&getSurfaceBody()=="甲壳薄而软，壳与肌肉分离，无力蜕壳"&&getSituationFeed()=="减少")		
+    	medicine:Medicine()
+  	then
+    	medicine.setDisease("营养性疾病");
+    	System.out.println("诊断结果：" + medicine.getDisease());
+end
